@@ -1,12 +1,18 @@
 using System;
+using AYellowpaper;
 using Gameplay.Humans.Players;
+using Gameplay.Interfaces;
 using UnityEngine;
 
 namespace Cameras
 {
     public class Follower : MonoBehaviour
     {
-        [SerializeField] private Player _player;
+        public InterfaceReference<IChangePosition> Player;
+
+        private IChangePosition _player => Player.Value;
+        
+        
         private Vector3 _offset;
 
         private void Start()
@@ -21,12 +27,12 @@ namespace Cameras
 
         private void Move()
         {
-            transform.position = _player.transform.position + _offset;
+            transform.position = _player.Position + _offset;
         }
 
         private void SetOffset()
         {
-            _offset = transform.position - _player.transform.position;
+            _offset = transform.position - _player.Position;
         }
     }
 }

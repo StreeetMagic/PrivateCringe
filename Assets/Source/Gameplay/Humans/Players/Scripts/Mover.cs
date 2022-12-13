@@ -1,15 +1,16 @@
-using System;
+using Gameplay.Interfaces;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.PlayerLoop;
 
 namespace Gameplay.Humans.Players
 {
-    public class Mover : MonoBehaviour
+    public class Mover : MonoBehaviour, IChangePosition
     {
         private PlayerInputActions _playerInputActions;
         private InputAction _move;
         private Vector2 _moveDirection = Vector2.zero;
+
+        public Vector3 Position => transform.position;
 
         private void Awake()
         {
@@ -18,7 +19,8 @@ namespace Gameplay.Humans.Players
 
         private void OnEnable()
         {
-            InitMoveComponent();
+            _move = _playerInputActions.Player.Move;
+            _move.Enable();
         }
 
         private void OnDisable()
@@ -31,16 +33,12 @@ namespace Gameplay.Humans.Players
             Move();
         }
 
-        private void InitMoveComponent()
-        {
-            _move = _playerInputActions.Player.Move;
-            _move.Enable();
-        }
-
         private void Move()
         {
             _moveDirection = _move.ReadValue<Vector2>();
+            
             var direction = new Vector3(_moveDirection.x, 0, _moveDirection.y);
+            
             transform.position += direction * 0.01f;
         }
     }

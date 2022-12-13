@@ -1,16 +1,21 @@
-using System;
+using AYellowpaper;
+using Gameplay.Interfaces;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 
 namespace Gameplay.Humans.Players
 {
     public class TargetFollower : MonoBehaviour
     {
-        [SerializeField] private Enemy _target;
+        public InterfaceReference<IChangePosition, MonoBehaviour> Enemy;
 
         private void Update()
         {
-            var direction = _target.transform.position - transform.position;
+            Follow();
+        }
+
+        private void Follow()
+        {
+            var direction = Enemy.Value.Position - transform.position;
             transform.forward = direction;
         }
     }
