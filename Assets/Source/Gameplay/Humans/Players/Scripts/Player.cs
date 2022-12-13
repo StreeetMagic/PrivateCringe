@@ -2,7 +2,5 @@
 
 namespace Gameplay.Humans.Players
 {
-    internal class Player : MonoBehaviour
-    {
-    }
+    internal class Player : MonoBehaviour { }
 }

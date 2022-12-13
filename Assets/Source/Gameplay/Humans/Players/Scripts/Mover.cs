@@ -18,8 +18,7 @@ namespace Gameplay.Humans.Players
 
         private void OnEnable()
         {
-            _move = _playerInputActions.Player.Move;
-            _move.Enable();
+            InitMoveComponent();
         }
 
         private void OnDisable()
@@ -30,6 +29,12 @@ namespace Gameplay.Humans.Players
         private void Update()
         {
             Move();
+        }
+
+        private void InitMoveComponent()
+        {
+            _move = _playerInputActions.Player.Move;
+            _move.Enable();
         }
 
         private void Move()

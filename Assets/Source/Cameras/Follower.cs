@@ -11,13 +11,22 @@ namespace Cameras
 
         private void Start()
         {
-            _offset = transform.position - _player.transform.position;
+            SetOffset();
         }
 
         private void LateUpdate()
         {
+            Move();
+        }
 
+        private void Move()
+        {
             transform.position = _player.transform.position + _offset;
+        }
+
+        private void SetOffset()
+        {
+            _offset = transform.position - _player.transform.position;
         }
     }
 }
