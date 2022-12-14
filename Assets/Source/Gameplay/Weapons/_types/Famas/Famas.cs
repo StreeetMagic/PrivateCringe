@@ -10,7 +10,7 @@ namespace Gameplay.Weapons
         private float _smallCooldown = 0.06f;
         private float _largeCooldown = 0.5f;
 
-        public override void Fire()
+        public override void Fire(Transform target)
         {
             if (Magazine.Bullets < FireCount)
                 return;

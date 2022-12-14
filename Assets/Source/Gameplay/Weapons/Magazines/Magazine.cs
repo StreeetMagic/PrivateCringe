@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Gameplay.Weapons
@@ -10,11 +11,19 @@ namespace Gameplay.Weapons
 
         public bool IsEmpty => Bullets == 0;
 
+        public event Action <int> BulletsChanged;
+
+        private void OnEnable()
+        {
+            BulletsChanged?.Invoke(Bullets);
+        }
+
         public int Fill(int count)
         {
             if (count > 0)
             {
                 Bullets += count;
+                BulletsChanged?.Invoke(Bullets);
             }
 
             return Bullets;
@@ -25,7 +34,7 @@ namespace Gameplay.Weapons
             if (Bullets >= 1)
             {
                 Bullets--;
-
+                BulletsChanged?.Invoke(Bullets);
                 return true;
             }
 
