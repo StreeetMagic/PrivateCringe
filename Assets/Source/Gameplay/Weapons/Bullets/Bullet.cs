@@ -1,4 +1,5 @@
 ﻿using System;
+using Gameplay.Interfaces;
 using UnityEngine;
 
 namespace Gameplay.Weapons
@@ -6,7 +7,9 @@ namespace Gameplay.Weapons
     public class Bullet : MonoBehaviour
 
     {
-        private Transform _target;
+        
+        
+        private ITargetable _target;
 
         private void Update()
         {
@@ -15,11 +18,11 @@ namespace Gameplay.Weapons
 
         public void Move()
         {
-            var direction = _target.transform.position - transform.position;
+            var direction = _target.Position - transform.position;
             transform.Translate(direction * 0.01f);
         }
 
-        public void Init(Transform target)
+        public void Init(ITargetable target)
         {
             _target = target;
         }

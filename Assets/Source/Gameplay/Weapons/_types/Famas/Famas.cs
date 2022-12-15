@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Gameplay.Interfaces;
 using UnityEngine;
 
 namespace Gameplay.Weapons
@@ -10,7 +11,7 @@ namespace Gameplay.Weapons
         private float _smallCooldown = 0.06f;
         private float _largeCooldown = 0.5f;
 
-        public override void Fire(Transform target)
+        public override void Fire(ITargetable target)
         {
             if (Magazine.Bullets < FireCount)
                 return;

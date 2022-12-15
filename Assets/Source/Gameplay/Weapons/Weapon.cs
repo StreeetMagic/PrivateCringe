@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Gameplay.Interfaces;
 using UnityEngine;
 
 namespace Gameplay.Weapons
@@ -15,14 +16,14 @@ namespace Gameplay.Weapons
         
         public Action<int> BulletsChanged;
 
-        private void OnEnable()
+        public abstract void Fire(ITargetable target);
+
+        public abstract void Reload();
+
+        private void Start()
         {
             BulletsChanged?.Invoke(Bullets);
         }
-
-        public abstract void Fire(Transform target);
-
-        public abstract void Reload();
 
         public void GainBullets(int count)
         {

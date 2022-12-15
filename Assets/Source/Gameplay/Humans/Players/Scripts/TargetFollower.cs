@@ -6,7 +6,7 @@ namespace Gameplay.Humans.Players
 {
     public class TargetFollower : MonoBehaviour
     {
-        public InterfaceReference<IChangePosition, MonoBehaviour> Enemy;
+        public InterfaceReference<ITargetable, MonoBehaviour> Enemy;
 
         private void Update()
         {
@@ -15,9 +15,7 @@ namespace Gameplay.Humans.Players
 
         private void Follow()
         {
-            var direction = Enemy.Value.Position - transform.position;
-            transform.forward = direction;
+            transform.LookAt(Enemy.Value.Position);
         }
     }
-    
 }

@@ -1,4 +1,6 @@
 using System.Collections;
+using AYellowpaper;
+using Gameplay.Interfaces;
 using Gameplay.Weapons;
 using UnityEngine;
 
@@ -10,7 +12,10 @@ namespace Gameplay.Humans.Players
         [SerializeField] private Weapon _pistol;
         [SerializeField] private Weapon _famas;
         [SerializeField] private Weapon _shotgun;
-        [SerializeField] private Transform _target;
+        
+        public InterfaceReference<ITargetable> Target;
+        
+        private ITargetable _target => Target.Value;
 
         private void Start()
         {
@@ -21,7 +26,7 @@ namespace Gameplay.Humans.Players
             StartCoroutine(Pause());
         }
 
-        public void Shoot()
+        private void Shoot()
         {
             _currentWeapon.Fire(_target);
         }
@@ -29,9 +34,9 @@ namespace Gameplay.Humans.Players
         private IEnumerator Pause()
         {
 
-            for (int i = 0; i < 10; i++)
+            while(true)
             {
-                yield return new WaitForSeconds(1);
+                yield return new WaitForSeconds(.5f);
                 Shoot();
             }
         }

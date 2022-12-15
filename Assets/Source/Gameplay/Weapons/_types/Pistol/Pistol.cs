@@ -1,15 +1,25 @@
+using Gameplay.Interfaces;
 using Gameplay.Weapons;
 using UnityEngine;
 
 public class Pistol : Weapon
 {
-    public override void Fire(Transform target)
+    public override void Fire(ITargetable target)
     {
-        var bullet = Instantiate(
-            BulletPrefab, 
-            ShootingPoint.transform.position, 
-            Quaternion.identity);
-        bullet.Init(target);
+        if (Magazine.TryFire())
+        {
+            var bullet = Instantiate(
+                BulletPrefab,
+                ShootingPoint.transform.position,
+                Quaternion.identity);
+
+            bullet.Init(target);
+        }
+        else
+        {
+            Reload();
+        }
+
     }
 
     public override void Reload()
@@ -17,6 +27,7 @@ public class Pistol : Weapon
         if (Bullets >= Magazine.MaxCapacity)
         {
             Magazine.Fill(Magazine.MaxCapacity);
+            Bullets -= Magazine.MaxCapacity;
             BulletsChanged?.Invoke(Bullets);
         }
         else if (Bullets == 0)
@@ -25,9 +36,10 @@ public class Pistol : Weapon
         }
         else
         {
-            Magazine.Fill(Bullets);
+            var count = Bullets;
+            Magazine.Fill(count);
+            Bullets -= count;
             BulletsChanged?.Invoke(Bullets);
         }
     }
-
 }

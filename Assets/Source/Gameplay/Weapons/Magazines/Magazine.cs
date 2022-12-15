@@ -18,6 +18,11 @@ namespace Gameplay.Weapons
             BulletsChanged?.Invoke(Bullets);
         }
 
+        private void Start()
+        {
+            BulletsChanged?.Invoke(Bullets);
+        }
+
         public int Fill(int count)
         {
             if (count > 0)
@@ -29,7 +34,7 @@ namespace Gameplay.Weapons
             return Bullets;
         }
 
-        public bool TryGetBullet()
+        public bool TryFire()
         {
             if (Bullets >= 1)
             {
