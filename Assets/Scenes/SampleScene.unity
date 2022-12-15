@@ -2362,11 +2362,11 @@ PrefabInstance:
     - target: {fileID: 854527514561233849, guid: 693d4419149140e4b99c3614119b8a5f, type: 3}
       propertyPath: m_Icon
       value: 
-      objectReference: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
+      objectReference: {fileID: 0}
     - target: {fileID: 4303639696506100255, guid: 693d4419149140e4b99c3614119b8a5f, type: 3}
       propertyPath: m_Icon
       value: 
-      objectReference: {fileID: 7866945982896999795, guid: 0000000000000000d000000000000000, type: 0}
+      objectReference: {fileID: 0}
     - target: {fileID: 4303639696506100255, guid: 693d4419149140e4b99c3614119b8a5f, type: 3}
       propertyPath: m_Name
       value: Crate
@@ -2432,10 +2432,6 @@ PrefabInstance:
       propertyPath: Enemy._underlyingValue
       value: 
       objectReference: {fileID: 1032187767}
-    - target: {fileID: 3136778677172524048, guid: 37477a6762e63b3419161d758ecc14a8, type: 3}
-      propertyPath: <Bullets>k__BackingField
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 3633161044906501469, guid: 37477a6762e63b3419161d758ecc14a8, type: 3}
       propertyPath: m_RootOrder
       value: 6
