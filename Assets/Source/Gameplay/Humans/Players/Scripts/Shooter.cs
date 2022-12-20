@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using AYellowpaper;
 using Gameplay.Interfaces;
@@ -13,33 +14,27 @@ namespace Gameplay.Humans.Players
         [SerializeField] private Weapon _famas;
         [SerializeField] private Weapon _shotgun;
         
-        public InterfaceReference<ITargetable> Target;
-        
-        private ITargetable _target => Target.Value;
+        public InterfaceReference<ITargetable> TargetReference;
+        public ITargetable Target => TargetReference.Value;
+
+        public Action GotTarget;
 
         private void Start()
         {
+            Init();
+        }
+
+        private void Init()
+        {
             _famas.gameObject.SetActive(false);
             _shotgun.gameObject.SetActive(false);
-            _currentWeapon = _pistol;
             _pistol.gameObject.SetActive(true);
-            StartCoroutine(Pause());
+            _currentWeapon = _pistol;
         }
 
         private void Shoot()
         {
-            _currentWeapon.Fire(_target);
-        }
-
-        private IEnumerator Pause()
-        {
-
-            while(true)
-            {
-                yield return new WaitForSeconds(.5f);
-                Shoot();
-            }
+            _currentWeapon.Fire(Target);
         }
     }
-
 }

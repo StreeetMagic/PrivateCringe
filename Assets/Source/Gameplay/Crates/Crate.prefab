@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 7283108645863312217}
   - component: {fileID: 426917629575760349}
   - component: {fileID: 590944648166961114}
-  - component: {fileID: 3125084531361847941}
   m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
@@ -27,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 854527514561233849}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.09, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.0972, y: 1.0972, z: 1.0972}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -84,19 +83,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &3125084531361847941
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 854527514561233849}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2973294611031939877
 GameObject:
   m_ObjectHideFlags: 0
@@ -275,6 +261,7 @@ GameObject:
   - component: {fileID: 4408069646165022653}
   - component: {fileID: -6277369005928075918}
   - component: {fileID: 7263238070354496512}
+  - component: {fileID: 1271906615985210254}
   m_Layer: 0
   m_Name: Crate
   m_TagString: Untagged
@@ -328,6 +315,19 @@ MonoBehaviour:
   Target:
     _underlyingValue: {fileID: -6277369005928075918}
   _text: {fileID: 5599551770585533285}
+--- !u!65 &1271906615985210254
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4303639696506100255}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6957302630654632678
 GameObject:
   m_ObjectHideFlags: 0
