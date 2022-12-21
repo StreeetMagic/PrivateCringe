@@ -13,5 +13,9 @@ public class Shotgun : Weapon
     {
         
     }
-    
+
+    public override void Stop()
+    {
+        throw new System.NotImplementedException();
+    }
 }

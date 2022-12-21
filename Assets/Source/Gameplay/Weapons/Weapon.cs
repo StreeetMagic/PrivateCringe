@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Gameplay.Humans.Players;
 using Gameplay.Interfaces;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ namespace Gameplay.Weapons
     {
         [SerializeField] protected Bullet BulletPrefab;
         [SerializeField] protected bool CanFire;
+        [SerializeField] protected Shooter Shooter;
 
         [field: SerializeField] public int Bullets { get; protected set; }
         [field: SerializeField] public Magazine Magazine { get; protected set; }
@@ -32,5 +34,7 @@ namespace Gameplay.Weapons
                 Bullets += count;
             }
         }
+
+        public abstract void Stop();
     }
 }

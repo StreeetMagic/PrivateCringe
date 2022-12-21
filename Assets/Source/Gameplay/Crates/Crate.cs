@@ -8,17 +8,32 @@ namespace Gameplay.Crates
     {
         [SerializeField] private int _health = 1;
         [SerializeField] private int _maxHealth = 1;
+        [SerializeField] private Outline _outline;
 
         public Vector3 Position =>
             transform.position;
 
-        public int Health
-            => _health;
+        public bool IsTargeted { get; set; }
 
-        public int MaxHealth => 
+        public int Health =>
+            _health;
+
+        public int MaxHealth =>
             _maxHealth;
 
-        public event Action <int, int> HealthChanged;
+        public event Action<int, int> HealthChanged;
+
+        public void SetTargetedOn()
+        {
+            IsTargeted = true;
+            _outline.enabled = true;
+        }
+
+        public void SetTargetedOff()
+        {
+            IsTargeted = false;
+            _outline.enabled = false;
+        }
 
         private void Start()
         {

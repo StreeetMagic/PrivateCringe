@@ -38,6 +38,11 @@ namespace Gameplay.Weapons
         {
         }
 
+        public override void Stop()
+        {
+            throw new System.NotImplementedException();
+        }
+
         private void FireSingleShot()
         {
             Debug.Log("Выстрелил");

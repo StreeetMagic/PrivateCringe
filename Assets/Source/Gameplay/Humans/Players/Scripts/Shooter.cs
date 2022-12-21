@@ -13,11 +13,19 @@ namespace Gameplay.Humans.Players
         [SerializeField] private Weapon _pistol;
         [SerializeField] private Weapon _famas;
         [SerializeField] private Weapon _shotgun;
-        
-        public InterfaceReference<ITargetable> TargetReference;
-        public ITargetable Target => TargetReference.Value;
+        [SerializeField] private TargetFinder _targetFinder;
 
-        public Action GotTarget;
+        private void OnEnable()
+        {
+            _targetFinder.TargetSet += OnTargetSet;
+            _targetFinder.TargetLost += OnTargetLost;
+        }
+
+        private void OnDisable()
+        {
+            _targetFinder.TargetSet -= OnTargetSet;
+            _targetFinder.TargetLost -= OnTargetLost;;
+        }
 
         private void Start()
         {
@@ -32,9 +40,15 @@ namespace Gameplay.Humans.Players
             _currentWeapon = _pistol;
         }
 
-        private void Shoot()
+        private void OnTargetSet(ITargetable target)
         {
-            _currentWeapon.Fire(Target);
+            _currentWeapon.Fire(target);
         }
+
+        private void OnTargetLost()
+        {
+            _currentWeapon.Stop();
+        }
+        
     }
 }

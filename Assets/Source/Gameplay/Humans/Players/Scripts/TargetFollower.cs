@@ -1,57 +1,61 @@
+using System;
 using System.Collections;
 using AYellowpaper;
 using Gameplay.Interfaces;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Gameplay.Humans.Players
 {
     public class TargetFollower : MonoBehaviour
     {
-        public ITargetable Target;
+        [SerializeField] private TargetFinder _targetFinder;
 
-        public Coroutine PauseCoroutine;
+        private Coroutine _followingCoroutine;
 
-        private void Update()
+        private void OnEnable()
         {
-            if (Target == null)
+            _targetFinder.TargetSet += OnTargetSet;
+            _targetFinder.TargetLost += OnTargetLost;
+        }
+
+        private void OnDisable()
+        {
+            _targetFinder.TargetSet -= OnTargetSet;
+            _targetFinder.TargetLost -= OnTargetLost;
+        }
+
+        private void OnTargetSet(ITargetable target)
+        {
+            if (_followingCoroutine == null)
             {
-                if (TrySetTarget(out ITargetable target))
-                {
-                    Target = target;
-                }
-            }
-            else if (Target != null)
-            {
-                Follow();
+                _followingCoroutine = StartCoroutine(Following(target.Position));
             }
         }
 
-        private void Follow()
+        private void OnTargetLost()
         {
-            transform.LookAt(Target.Position);
-        }
-
-        private bool TrySetTarget(out ITargetable target)
-        {
-            if (PauseCoroutine == null)
+            if (_followingCoroutine != null)
             {
-                Debug.Log("Запускаю карутину");
-                PauseCoroutine = StartCoroutine(Pause());
+                StopCoroutine(_followingCoroutine);
+                _followingCoroutine = null;
             }
-
-            target = null;
-
-            return false;
         }
 
-        private IEnumerator Pause()
+        private IEnumerator Following(Vector3 location)
         {
-            Debug.Log("Начал поиск цели");
+            while (true)
+            {
+                yield return null;
 
-            yield return new WaitForSeconds(.2f);
-            StopCoroutine(PauseCoroutine);
-            PauseCoroutine = null;
-            Debug.Log("Останавливаю корутину");
+                var myLocation = new Vector3(location.x, 0, location.z);
+                
+                
+                transform.LookAt(myLocation);
+
+
+
+            }
         }
     }
 }

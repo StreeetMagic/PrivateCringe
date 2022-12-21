@@ -7,24 +7,20 @@ namespace Gameplay.Weapons
     public class Bullet : MonoBehaviour
 
     {
-        
-        
         private ITargetable _target;
+        
+        [SerializeField] private Rigidbody _rigidbody;
+        
+        [SerializeField] private float _power = 1000f;
 
-        private void Update()
+        public void Push(ITargetable target)
         {
-            Move();
-        }
-
-        public void Move()
-        {
-            var direction = _target.Position - transform.position;
-            transform.Translate(direction * 0.01f);
-        }
-
-        public void Init(ITargetable target)
-        {
+            print("выстрелил");
             _target = target;
+            
+            var direction = _target.Position - transform.position;
+            _rigidbody.AddForce(direction * _power, ForceMode.Acceleration);
+            
         }
     }
 }
