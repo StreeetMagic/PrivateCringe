@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Gameplay.Weapons
+namespace Gameplay.Weapons.Magazines
 {
     public class Magazine : MonoBehaviour
     {

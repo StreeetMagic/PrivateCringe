@@ -2,7 +2,7 @@
 using Gameplay.Interfaces;
 using UnityEngine;
 
-namespace Gameplay.Weapons
+namespace Gameplay.Weapons.Famas
 {
     public class Famas : Weapon
     {
@@ -34,7 +34,7 @@ namespace Gameplay.Weapons
             CanFire = true;
         }
 
-        public override void Reload()
+        public override void Reload(ITargetable target)
         {
         }
 

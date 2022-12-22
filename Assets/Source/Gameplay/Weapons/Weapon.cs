@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using Gameplay.Humans.Players;
 using Gameplay.Interfaces;
+using Gameplay.Weapons.Bullets;
+using Gameplay.Weapons.Magazines;
 using UnityEngine;
 
 namespace Gameplay.Weapons
@@ -18,10 +20,6 @@ namespace Gameplay.Weapons
         
         public Action<int> BulletsChanged;
 
-        public abstract void Fire(ITargetable target);
-
-        public abstract void Reload();
-
         private void Start()
         {
             BulletsChanged?.Invoke(Bullets);
@@ -34,6 +32,10 @@ namespace Gameplay.Weapons
                 Bullets += count;
             }
         }
+
+        public abstract void Fire(ITargetable target);
+
+        public abstract void Reload(ITargetable target);
 
         public abstract void Stop();
     }

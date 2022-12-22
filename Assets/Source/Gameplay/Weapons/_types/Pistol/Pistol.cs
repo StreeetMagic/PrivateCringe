@@ -6,7 +6,8 @@ namespace Gameplay.Weapons.Pistol
 {
     public class Pistol : Weapon
     {
-        private const float MainFireCooldown = .5f;
+        public const float ReloadTime = 1;
+        public const float MainFireCooldown = .4f;
 
         private Coroutine _firingCoroutine;
         private Coroutine _reloadingCoroutine;
@@ -17,6 +18,22 @@ namespace Gameplay.Weapons.Pistol
             {
                 _firingCoroutine = StartCoroutine(Firing(target));
             }
+            else
+            {
+                print("не получается, персонаж уже стреляет");
+            }
+        }
+
+        public override void Reload(ITargetable target)
+        {
+            if (_reloadingCoroutine == null)
+            {
+                _reloadingCoroutine = StartCoroutine(Reloading(target));
+            }
+            else
+            {
+                print("не получается, персонаж уже перезаряжает");
+            }
         }
 
         public override void Stop()
@@ -26,35 +43,11 @@ namespace Gameplay.Weapons.Pistol
                 StopCoroutine(_firingCoroutine);
                 _firingCoroutine = null;
             }
-        }
 
-        public override void Reload()
-        {
-            if (Bullets >= Magazine.MaxCapacity)
+            if (_reloadingCoroutine != null)
             {
-                Magazine.Fill(Magazine.MaxCapacity);
-                Bullets -= Magazine.MaxCapacity;
-                BulletsChanged?.Invoke(Bullets);
-
-                print("Перезарядил");
-            }
-            else if (Bullets == 0)
-            {
-                Debug.Log("Нет патронов");
-
-                if (_firingCoroutine != null)
-                {
-                    StopCoroutine(_firingCoroutine);
-                    _firingCoroutine = null;
-                }
-            }
-            else
-            {
-                var count = Bullets;
-                Magazine.Fill(count);
-                Bullets -= count;
-                BulletsChanged?.Invoke(Bullets);
-                print("Перезарядил");
+                StopCoroutine(_reloadingCoroutine);
+                _reloadingCoroutine = null;
             }
         }
 
@@ -62,25 +55,33 @@ namespace Gameplay.Weapons.Pistol
         {
             var pause = new WaitForSeconds(MainFireCooldown);
 
-            while (true)
+            while (Magazine.TryFire())
             {
-                if (Magazine.TryFire())
-                {
-                    var bullet = Instantiate(
-                        BulletPrefab,
-                        ShootingPoint.transform.position,
-                        Quaternion.identity);
+                var bullet = Instantiate(
+                    BulletPrefab,
+                    ShootingPoint.transform.position,
+                    Quaternion.identity);
 
-                    bullet.Push(target);
+                bullet.Push(target);
 
-                    yield return pause;
-                }
-                else
-                {
-                    Reload();
-
-                }
+                yield return pause;
             }
+
+            Stop();
+            Reload(target);
+        }
+
+        private IEnumerator Reloading(ITargetable target)
+        {
+
+
+            yield return new WaitForSeconds(ReloadTime);
+            Magazine.Fill(Magazine.MaxCapacity);
+            Bullets -= Magazine.MaxCapacity;
+            BulletsChanged?.Invoke(Bullets);
+
+            Stop();
+            Fire(target);
         }
     }
 }

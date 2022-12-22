@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using AYellowpaper;
+using Gameplay.Humans.Players.TargetFinders;
 using Gameplay.Interfaces;
 using Gameplay.Weapons;
 using UnityEngine;

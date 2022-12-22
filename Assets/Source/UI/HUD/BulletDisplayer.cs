@@ -1,9 +1,8 @@
-using System;
 using Gameplay.Weapons;
 using TMPro;
 using UnityEngine;
 
-namespace UI
+namespace UI.HUD
 {
     public class BulletDisplayer : MonoBehaviour
     {
@@ -42,5 +41,9 @@ namespace UI
             var text = _magazineBullets + " / " + _bullets;
             Text.text = text;
         }
+    }
+
+    class BulletDisplayerImpl : BulletDisplayer
+    {
     }
 }

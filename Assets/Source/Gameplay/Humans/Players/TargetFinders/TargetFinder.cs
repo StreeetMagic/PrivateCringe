@@ -1,83 +1,101 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Gameplay.Interfaces;
 using UnityEngine;
 
-public class TargetFinder : MonoBehaviour
+namespace Gameplay.Humans.Players.TargetFinders
 {
-    private ITargetable _target;
-
-    [SerializeField] private float FindRadius = 10f;
-    [SerializeField] private float LoseRadius = 10.1f;
-
-    public event Action<ITargetable> TargetSet;
-    public event Action TargetLost;
-
-    private void Update()
+    public class TargetFinder : MonoBehaviour
     {
-        FindTarget();
-    }
+        private ITargetable _target;
 
-    private void FindTarget()
-    {
-        if (_target == null)
+        [SerializeField] private float FindRadius = 10f;
+        [SerializeField] private float LoseRadius = 10.1f;
+
+        public event Action<ITargetable> TargetSet;
+        public event Action TargetLost;
+
+        private void Update()
         {
-            if (TrySetTarget())
+            SearchForTargets();
+        }
+
+        private void SearchForTargets()
+        {
+            if (_target == null)
             {
-                TargetSet?.Invoke(_target);
+                TrySetTarget();
+            }
+            else
+            {
+                TrySetTarget();
+                TryLoseTarget();
             }
         }
-        else
+
+        private void TrySetTarget()
         {
-            if (TryLoseTarget())
+            var colliders = Physics.OverlapSphere(transform.position, FindRadius);
+            float minDistance = float.MaxValue;
+            
+            var newTarget = TryGetTarget(colliders, minDistance);
+
+            if (newTarget != null)
             {
-                TargetLost?.Invoke();
-            }
-        }
-    }
-
-    private bool TrySetTarget()
-    {
-        var colliders = Physics.OverlapSphere(transform.position, FindRadius);
-
-        float minDistance = float.MaxValue;
-
-        foreach (var collider1 in colliders)
-        {
-            if (collider1.TryGetComponent(out ITargetable target))
-            {
-                var distance = Vector3.SqrMagnitude(transform.position - collider1.gameObject.transform.position);
-
-                if (distance < minDistance)
+                if (_target != newTarget)
                 {
-                    minDistance = distance;
-                    _target = target;
+                    if (_target != null)
+                    {
+                        _target.SetTargetedOff();
+                        _target.Missed -= OnLost;
+                        TargetLost?.Invoke();
+                    }
+
+                    _target = newTarget;
+                    _target.Missed += OnLost;
                     _target.SetTargetedOn();
+                    TargetSet?.Invoke(_target);
                 }
             }
         }
 
-        if (_target != null)
+        private ITargetable TryGetTarget(Collider[] colliders, float minDistance)
         {
-            return true;
+            ITargetable newTarget = null;
+
+            foreach (var collider1 in colliders)
+            {
+                if (collider1.TryGetComponent(out ITargetable target))
+                {
+                    var distance = Vector3.SqrMagnitude(transform.position - collider1.gameObject.transform.position);
+
+                    if (distance < minDistance)
+                    {
+                        minDistance = distance;
+                        newTarget = target;
+                    }
+                }
+            }
+
+            return newTarget;
         }
 
-        return false;
-    }
+        private void TryLoseTarget()
+        {
+            var distance = Vector3.SqrMagnitude(transform.position - _target.Position);
 
-    private bool TryLoseTarget()
-    {
-        var distance = Vector3.SqrMagnitude(transform.position - _target.Position);
+            if (distance > LoseRadius * LoseRadius)
+            {
+                _target.Missed -= OnLost;
+                OnLost();
+                TargetLost?.Invoke();
+            }
+        }
 
-        if (distance > LoseRadius * LoseRadius)
+        private void OnLost()
         {
             _target.SetTargetedOff();
             _target = null;
-
-            return true;
+            TargetLost?.Invoke();
         }
-
-        return false;
     }
 }

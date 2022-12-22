@@ -12,6 +12,7 @@ namespace Gameplay.Interfaces
         public void Die();
         
         public event Action <int, int> HealthChanged;
+        public event Action  Died;
 
     }
 }

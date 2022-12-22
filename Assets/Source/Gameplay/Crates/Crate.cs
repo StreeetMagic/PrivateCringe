@@ -15,13 +15,12 @@ namespace Gameplay.Crates
 
         public bool IsTargeted { get; set; }
 
-        public int Health =>
-            _health;
+        public int Health => _health;
 
-        public int MaxHealth =>
-            _maxHealth;
+        public int MaxHealth => _maxHealth;
 
         public event Action<int, int> HealthChanged;
+        public event Action Died;
 
         public void SetTargetedOn()
         {
@@ -34,6 +33,8 @@ namespace Gameplay.Crates
             IsTargeted = false;
             _outline.enabled = false;
         }
+
+        public event Action Missed;
 
         private void Start()
         {
@@ -48,15 +49,18 @@ namespace Gameplay.Crates
             _health -= damage;
 
             if (_health <= 0)
+            {
                 _health = 0;
+                Die();
+            }
 
             HealthChanged?.Invoke(_health, _maxHealth);
-            Die();
         }
 
         public void Die()
         {
-            Debug.Log("Умер");
+            Missed?.Invoke();
+            gameObject.SetActive(false);
         }
     }
 }

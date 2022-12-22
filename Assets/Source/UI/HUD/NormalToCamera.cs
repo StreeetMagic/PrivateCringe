@@ -1,8 +1,6 @@
-﻿using System;
-using UnityEngine;
-using UnityEngine.UIElements;
+﻿using UnityEngine;
 
-namespace UI
+namespace UI.HUD
 {
     public class NormalToCamera : MonoBehaviour
     {

@@ -1,10 +1,9 @@
-﻿using System;
+﻿using AYellowpaper;
 using Gameplay.Interfaces;
-using UnityEngine;
-using AYellowpaper;
 using TMPro;
+using UnityEngine;
 
-namespace UI
+namespace UI.HUD
 {
     public class HealthDisplayer : MonoBehaviour
     {

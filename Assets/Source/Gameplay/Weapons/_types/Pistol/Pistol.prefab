@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 8443734160276886868}
   - component: {fileID: 6279447566303722718}
   - component: {fileID: 2578573232092567465}
-  - component: {fileID: 3012237866395682826}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -84,20 +83,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &3012237866395682826
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1897577325883260670}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!1 &2424937104524151024
 GameObject:
   m_ObjectHideFlags: 0
@@ -109,7 +94,6 @@ GameObject:
   - component: {fileID: 1776735736656399930}
   - component: {fileID: 3621031159046465047}
   - component: {fileID: 3042548835326513448}
-  - component: {fileID: 2089289135734345136}
   m_Layer: 0
   m_Name: Cylinder (1)
   m_TagString: Untagged
@@ -182,20 +166,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &2089289135734345136
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2424937104524151024}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!1001 &8300535182005285119
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -276,6 +246,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BulletPrefab: {fileID: 0}
   CanFire: 0
+  Shooter: {fileID: 0}
   <Bullets>k__BackingField: 0
   <Magazine>k__BackingField: {fileID: 0}
   <ShootingPoint>k__BackingField: {fileID: 0}

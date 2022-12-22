@@ -1,21 +1,22 @@
 using Gameplay.Interfaces;
-using Gameplay.Weapons;
-using UnityEngine;
 
-public class Shotgun : Weapon
+namespace Gameplay.Weapons.Shotgun
 {
-    public override void Fire(ITargetable target)
+    public class Shotgun : Weapon
     {
+        public override void Fire(ITargetable target)
+        {
         
-    }
+        }
 
-    public override void Reload()
-    {
+        public override void Reload(ITargetable target)
+        {
         
-    }
+        }
 
-    public override void Stop()
-    {
-        throw new System.NotImplementedException();
+        public override void Stop()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
