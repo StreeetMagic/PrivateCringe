@@ -6,82 +6,60 @@ namespace Gameplay.Weapons.Pistol
 {
     public class Pistol : Weapon
     {
-        public const float ReloadTime = 1;
-        public const float MainFireCooldown = .4f;
-
-        private Coroutine _firingCoroutine;
-        private Coroutine _reloadingCoroutine;
-
-        public override void Fire(ITargetable target)
-        {
-            if (_firingCoroutine == null)
-            {
-                _firingCoroutine = StartCoroutine(Firing(target));
-            }
-            else
-            {
-                print("не получается, персонаж уже стреляет");
-            }
-        }
-
-        public override void Reload(ITargetable target)
-        {
-            if (_reloadingCoroutine == null)
-            {
-                _reloadingCoroutine = StartCoroutine(Reloading(target));
-            }
-            else
-            {
-                print("не получается, персонаж уже перезаряжает");
-            }
-        }
-
-        public override void Stop()
+        public override bool TryFire(ITargetable target)
         {
             if (_firingCoroutine != null)
             {
-                StopCoroutine(_firingCoroutine);
-                _firingCoroutine = null;
+                Shooter.Stop();
+                return false;
             }
 
-            if (_reloadingCoroutine != null)
+            if (Magazine.Bullets == 0)
             {
-                StopCoroutine(_reloadingCoroutine);
-                _reloadingCoroutine = null;
+                TryReload();
+                Shooter.Stop();
+                return false;
             }
+
+            _firingCoroutine = StartCoroutine(Firing(target));
+
+            return true;
         }
 
-        private IEnumerator Firing(ITargetable target)
+        protected override bool TryReload()
+        {
+            if (_reloadingCoroutine != null)
+                return false;
+
+            _reloadingCoroutine = StartCoroutine(Reloading());
+
+            return true;
+        }
+
+        protected override IEnumerator Firing(ITargetable target)
         {
             var pause = new WaitForSeconds(MainFireCooldown);
 
             while (Magazine.TryFire())
             {
-                var bullet = Instantiate(
-                    BulletPrefab,
-                    ShootingPoint.transform.position,
-                    Quaternion.identity);
-
-                bullet.Push(target);
+                FireSingleBullet(target);
 
                 yield return pause;
             }
 
             Stop();
-            Reload(target);
+            TryReload();
         }
 
-        private IEnumerator Reloading(ITargetable target)
+        protected override IEnumerator Reloading()
         {
-
-
+            Shooter.Stop();
             yield return new WaitForSeconds(ReloadTime);
             Magazine.Fill(Magazine.MaxCapacity);
             Bullets -= Magazine.MaxCapacity;
             BulletsChanged?.Invoke(Bullets);
 
             Stop();
-            Fire(target);
         }
     }
 }

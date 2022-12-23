@@ -1,20 +1,26 @@
+using System.Collections;
 using Gameplay.Interfaces;
 
 namespace Gameplay.Weapons.Shotgun
 {
     public class Shotgun : Weapon
     {
-        public override void Fire(ITargetable target)
+        public override bool TryFire(ITargetable target)
         {
-        
+            return false;
         }
 
-        public override void Reload(ITargetable target)
+        protected override IEnumerator Firing(ITargetable target)
         {
-        
+            throw new System.NotImplementedException();
         }
 
-        public override void Stop()
+        protected override bool TryReload()
+        {
+            return false;
+        }
+
+        protected override IEnumerator Reloading()
         {
             throw new System.NotImplementedException();
         }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Gameplay.Interfaces;
 using UnityEngine;
 
@@ -11,37 +12,49 @@ namespace Gameplay.Humans.Players.TargetFinders
         [SerializeField] private float FindRadius = 10f;
         [SerializeField] private float LoseRadius = 10.1f;
 
+        private Coroutine _searchingTargets;
+        private readonly float _cooldown = .1f;
+
         public event Action<ITargetable> TargetSet;
         public event Action TargetLost;
 
-        private void Update()
+        private void Start()
         {
-            SearchForTargets();
-        }
-
-        private void SearchForTargets()
-        {
-            if (_target == null)
+            if (_searchingTargets == null)
             {
-                TrySetTarget();
-            }
-            else
-            {
-                TrySetTarget();
-                TryLoseTarget();
+                _searchingTargets = StartCoroutine(SearchingForTargets());
             }
         }
 
-        private void TrySetTarget()
+        private IEnumerator SearchingForTargets()
+        {
+            var pause = new WaitForSeconds(_cooldown);
+
+            while (true)
+            {
+                if (TrySetTarget() == false)
+                {
+                    TryLoseTarget();
+                }
+
+                yield return pause;
+            }
+        }
+
+        private bool TrySetTarget()
         {
             var colliders = Physics.OverlapSphere(transform.position, FindRadius);
             float minDistance = float.MaxValue;
-            
+
             var newTarget = TryGetTarget(colliders, minDistance);
 
             if (newTarget != null)
             {
-                if (_target != newTarget)
+                if (_target == newTarget)
+                {
+                    TargetSet?.Invoke(_target);
+                }
+                else
                 {
                     if (_target != null)
                     {
@@ -54,8 +67,12 @@ namespace Gameplay.Humans.Players.TargetFinders
                     _target.Missed += OnLost;
                     _target.SetTargetedOn();
                     TargetSet?.Invoke(_target);
+
+                    return true;
                 }
             }
+
+            return false;
         }
 
         private ITargetable TryGetTarget(Collider[] colliders, float minDistance)
@@ -79,8 +96,13 @@ namespace Gameplay.Humans.Players.TargetFinders
             return newTarget;
         }
 
-        private void TryLoseTarget()
+        private bool TryLoseTarget()
         {
+            if (_target == null)
+            {
+                return false;
+            }
+
             var distance = Vector3.SqrMagnitude(transform.position - _target.Position);
 
             if (distance > LoseRadius * LoseRadius)
@@ -88,7 +110,11 @@ namespace Gameplay.Humans.Players.TargetFinders
                 _target.Missed -= OnLost;
                 OnLost();
                 TargetLost?.Invoke();
+
+                return true;
             }
+
+            return false;
         }
 
         private void OnLost()

@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using AYellowpaper;
 using Gameplay.Humans.Players.TargetFinders;
 using Gameplay.Interfaces;
 using Gameplay.Weapons;
@@ -15,6 +13,8 @@ namespace Gameplay.Humans.Players
         [SerializeField] private Weapon _famas;
         [SerializeField] private Weapon _shotgun;
         [SerializeField] private TargetFinder _targetFinder;
+
+        private Coroutine _waitAndFire;
 
         private void OnEnable()
         {
@@ -35,21 +35,40 @@ namespace Gameplay.Humans.Players
 
         private void Init()
         {
-            _famas.gameObject.SetActive(false);
+            _famas.gameObject.SetActive(true);
             _shotgun.gameObject.SetActive(false);
-            _pistol.gameObject.SetActive(true);
-            _currentWeapon = _pistol;
+            _pistol.gameObject.SetActive(false);
+            _currentWeapon = _famas;
         }
 
         private void OnTargetSet(ITargetable target)
         {
-            _currentWeapon.Fire(target);
+            if (_waitAndFire == null)
+            {
+                _waitAndFire = StartCoroutine(WaitAndFire(target));
+            }
         }
 
         private void OnTargetLost()
         {
             _currentWeapon.Stop();
+
+            Stop();
         }
-        
+
+        private IEnumerator WaitAndFire(ITargetable target)
+        {
+            yield return new WaitForSeconds(.05f);
+            _currentWeapon.TryFire(target);
+        }
+
+        public void Stop()
+        {
+            if (_waitAndFire != null)
+            {
+                StopCoroutine(_waitAndFire);
+                _waitAndFire = null;
+            }
+        }
     }
 }
