@@ -5,12 +5,12 @@ namespace Gameplay.Weapons.Shotgun
 {
     public class Shotgun : Weapon
     {
-        public override bool TryFire(ITargetable target)
+        public override bool TryFire()
         {
             return false;
         }
 
-        protected override IEnumerator Firing(ITargetable target)
+        protected override IEnumerator Firing()
         {
             throw new System.NotImplementedException();
         }

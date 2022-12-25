@@ -6,7 +6,7 @@ namespace Gameplay.Weapons.Pistol
 {
     public class Pistol : Weapon
     {
-        public override bool TryFire(ITargetable target)
+        public override bool TryFire()
         {
             if (_firingCoroutine != null)
             {
@@ -21,7 +21,7 @@ namespace Gameplay.Weapons.Pistol
                 return false;
             }
 
-            _firingCoroutine = StartCoroutine(Firing(target));
+            _firingCoroutine = StartCoroutine(Firing());
 
             return true;
         }
@@ -36,13 +36,13 @@ namespace Gameplay.Weapons.Pistol
             return true;
         }
 
-        protected override IEnumerator Firing(ITargetable target)
+        protected override IEnumerator Firing()
         {
             var pause = new WaitForSeconds(MainFireCooldown);
 
             while (Magazine.TryFire())
             {
-                FireSingleBullet(target);
+                FireSingleBullet();
 
                 yield return pause;
             }

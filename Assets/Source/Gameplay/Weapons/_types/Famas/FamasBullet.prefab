@@ -9,7 +9,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -2181308467440737201, guid: 8c92a2a886c20a24787058847db61452, type: 3}
       propertyPath: _power
-      value: 1500.21
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: -2181308467440737201, guid: 8c92a2a886c20a24787058847db61452, type: 3}
       propertyPath: _damage

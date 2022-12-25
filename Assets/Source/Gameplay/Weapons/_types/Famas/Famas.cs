@@ -9,9 +9,16 @@ namespace Gameplay.Weapons.Famas
         [SerializeField] private int _fireCount = 3;
         [SerializeField] private float _tripleShotCooldown = 0.06f;
 
-        public override bool TryFire(ITargetable target)
+        public override bool TryFire()
         {
             if (_firingCoroutine != null)
+            {
+                Shooter.Stop();
+
+                return false;
+            }
+
+            if (_reloadingCoroutine != null)
             {
                 Shooter.Stop();
 
@@ -26,26 +33,28 @@ namespace Gameplay.Weapons.Famas
                 return false;
             }
 
-            _firingCoroutine = StartCoroutine(Firing(target));
+            _firingCoroutine = StartCoroutine(Firing());
 
             return true;
         }
 
-        protected override IEnumerator Firing(ITargetable target)
+        protected override IEnumerator Firing()
         {
             var singlePause = new WaitForSeconds(_tripleShotCooldown);
             var queuePause = new WaitForSeconds(MainFireCooldown);
 
-            while (Magazine.Bullets >= _fireCount)
+            while (Magazine.Bullets >= 1)
             {
                 for (int i = 0; i < _fireCount; i++)
                 {
                     if (Magazine.TryFire())
                     {
-                        FireSingleBullet(target);
+                        FireSingleBullet();
+
                         yield return singlePause;
                     }
                 }
+
                 yield return queuePause;
             }
             Stop();
@@ -65,6 +74,7 @@ namespace Gameplay.Weapons.Famas
         protected override IEnumerator Reloading()
         {
             Shooter.Stop();
+
             yield return new WaitForSeconds(ReloadTime);
 
             if (Bullets >= Magazine.MaxCapacity)

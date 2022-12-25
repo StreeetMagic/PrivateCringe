@@ -16,6 +16,11 @@ namespace Gameplay.Humans.Players
 
         private Coroutine _waitAndFire;
 
+        private void Start()
+        {
+            Init();
+        }
+
         private void OnEnable()
         {
             _targetFinder.TargetSet += OnTargetSet;
@@ -28,16 +33,12 @@ namespace Gameplay.Humans.Players
             _targetFinder.TargetLost -= OnTargetLost;;
         }
 
-        private void Start()
-        {
-            Init();
-        }
-
         private void Init()
         {
             _famas.gameObject.SetActive(true);
             _shotgun.gameObject.SetActive(false);
             _pistol.gameObject.SetActive(false);
+            
             _currentWeapon = _famas;
         }
 
@@ -59,7 +60,8 @@ namespace Gameplay.Humans.Players
         private IEnumerator WaitAndFire(ITargetable target)
         {
             yield return new WaitForSeconds(.05f);
-            _currentWeapon.TryFire(target);
+            _currentWeapon.TryFire();
+            _waitAndFire = null;
         }
 
         public void Stop()

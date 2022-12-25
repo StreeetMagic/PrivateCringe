@@ -17,28 +17,10 @@ namespace Gameplay.Weapons.Bullets
 
         private  Random _random;
 
-        public void Push(ITargetable target)
+        public void Push(Vector3 direction)
         {
-            _target = target;
-            
-            
-            _random = new Random();
-
-            var offset1 = _random.Next(1, _maxOffset) / 10;
-            var offset2 = _random.Next(1, _maxOffset) / 10;
-            var offset3 = _random.Next(1, _maxOffset) / 10;
-
-            var direction = (_target.Position - transform.position).normalized;
-
-            
-            
-            
             _rigidbody.AddForce(direction * _power, ForceMode.Acceleration);
-            
-            
         }
-
-
 
         private void OnCollisionEnter(Collision collision)
         {
