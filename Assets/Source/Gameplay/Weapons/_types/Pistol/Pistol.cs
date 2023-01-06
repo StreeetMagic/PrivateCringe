@@ -6,60 +6,44 @@ namespace Gameplay.Weapons.Pistol
 {
     public class Pistol : Weapon
     {
-        public override bool TryFire()
-        {
-            if (_firingCoroutine != null)
-            {
-                Shooter.Stop();
-                return false;
-            }
-
-            if (Magazine.Bullets == 0)
-            {
-                TryReload();
-                Shooter.Stop();
-                return false;
-            }
-
-            _firingCoroutine = StartCoroutine(Firing());
-
-            return true;
-        }
-
-        protected override bool TryReload()
-        {
-            if (_reloadingCoroutine != null)
-                return false;
-
-            _reloadingCoroutine = StartCoroutine(Reloading());
-
-            return true;
-        }
-
+       
         protected override IEnumerator Firing()
         {
             var pause = new WaitForSeconds(MainFireCooldown);
 
-            while (Magazine.TryFire())
+            while (CanFire)
             {
-                FireSingleBullet();
+                if (Magazine.Bullets == 1)
+                {
+                    Magazine.Clear();
 
-                yield return pause;
+                    if (Bullets > 0)
+                    {
+                        Reload();
+                    }
+                    else
+                    {
+                        Stop();
+                    }
+                }
+                else
+                {
+                    Magazine.LoseBullet();
+                    FireSingleBullet();
+
+                    yield return pause;
+                }
             }
-
-            Stop();
-            TryReload();
         }
 
         protected override IEnumerator Reloading()
         {
-            Shooter.Stop();
+            IsReloading = true;
             yield return new WaitForSeconds(ReloadTime);
             Magazine.Fill(Magazine.MaxCapacity);
             Bullets -= Magazine.MaxCapacity;
             BulletsChanged?.Invoke(Bullets);
-
-            Stop();
+            IsReloading = false;
         }
     }
 }

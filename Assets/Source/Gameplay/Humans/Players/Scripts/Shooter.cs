@@ -8,18 +8,21 @@ namespace Gameplay.Humans.Players
 {
     public class Shooter : MonoBehaviour
     {
-        [SerializeField] private Weapon _currentWeapon;
-        [SerializeField] private Weapon _pistol;
-        [SerializeField] private Weapon _famas;
-        [SerializeField] private Weapon _shotgun;
+        private const float SwitchRange = 156f;
+
+        [SerializeField] private WeaponSwitcher WeaponSwitcher;
         [SerializeField] private TargetFinder _targetFinder;
+        [SerializeField] private Reloader Reloader;
 
         private Coroutine _waitAndFire;
 
-        private void Start()
-        {
-            Init();
-        }
+        private Weapon CurrentWeapon => WeaponSwitcher.CurrentWeapon;
+
+        private Weapon Pistol => WeaponSwitcher.Pistol;
+        private Weapon Famas => WeaponSwitcher.Famas;
+        private Weapon Shotgun => WeaponSwitcher.Shotgun;
+        
+        private bool _waiting;
 
         private void OnEnable()
         {
@@ -30,45 +33,87 @@ namespace Gameplay.Humans.Players
         private void OnDisable()
         {
             _targetFinder.TargetSet -= OnTargetSet;
-            _targetFinder.TargetLost -= OnTargetLost;;
-        }
-
-        private void Init()
-        {
-            _famas.gameObject.SetActive(true);
-            _shotgun.gameObject.SetActive(false);
-            _pistol.gameObject.SetActive(false);
-            
-            _currentWeapon = _famas;
+            _targetFinder.TargetLost -= OnTargetLost;
         }
 
         private void OnTargetSet(ITargetable target)
         {
-            if (_waitAndFire == null)
+            if (WeaponSwitcher.CurrentWeapon.IsReloading || WeaponSwitcher.IsSwitching)
             {
-                _waitAndFire = StartCoroutine(WaitAndFire(target));
+                return;
+            }
+
+            var direction = target.Position - transform.position;
+            var sqrDistance = Vector3.SqrMagnitude(direction);
+
+            if (sqrDistance >= SwitchRange)
+            {
+                if (CurrentWeapon != Famas && Famas.CanFire)
+                    WeaponSwitcher.SwitchTo(Famas);
+
+                else if (CurrentWeapon == Famas && CurrentWeapon.CanFire)
+                    TryFire();
+
+                else if (CurrentWeapon != Pistol && CurrentWeapon.CanFire == false)
+                    WeaponSwitcher.SwitchTo(WeaponSwitcher.Pistol);
+
+                else if (CurrentWeapon == Pistol && CurrentWeapon.CanFire)
+                    TryFire();
+            }
+            else
+            {
+                if (CurrentWeapon != Shotgun && Shotgun.CanFire)
+                    WeaponSwitcher.SwitchTo(WeaponSwitcher.Shotgun);
+
+                else if (CurrentWeapon == Shotgun && CurrentWeapon.CanFire)
+                    TryFire();
+
+                else if (CurrentWeapon == Pistol && CurrentWeapon.CanFire == false)
+                    WeaponSwitcher.SwitchTo(Pistol);
+
+                else if (CurrentWeapon == Shotgun && CurrentWeapon.CanFire)
+                    TryFire();
+            }
+        }
+
+        public void TryFire()
+        {
+            if (CurrentWeapon.CanFire == false)
+            {
+                print("просим перезярдится");
+                Reloader.TryReload(CurrentWeapon);
+
+                return;
+            }
+
+            if (CurrentWeapon.IsFiring == false)
+            {
+                _waitAndFire = StartCoroutine(WaitAndFire());
             }
         }
 
         private void OnTargetLost()
         {
-            _currentWeapon.Stop();
+            CurrentWeapon.Stop();
 
             Stop();
         }
 
-        private IEnumerator WaitAndFire(ITargetable target)
+        private IEnumerator WaitAndFire()
         {
+            _waiting = true;
+
             yield return new WaitForSeconds(.05f);
-            _currentWeapon.TryFire();
-            _waitAndFire = null;
+            CurrentWeapon.TryFire();
+            _waiting = false;
         }
 
         public void Stop()
         {
-            if (_waitAndFire != null)
+            if (_waitAndFire != null && _waiting)
             {
                 StopCoroutine(_waitAndFire);
+                _waiting = false;
                 _waitAndFire = null;
             }
         }

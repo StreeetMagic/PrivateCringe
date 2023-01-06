@@ -9,6 +9,7 @@ namespace Gameplay.Weapons.Magazines
         [field: SerializeField] public int Bullets { get; private set; }
 
         public bool IsEmpty => Bullets == 0;
+        public bool IsFull => Bullets == MaxCapacity;
 
         public event Action <int> BulletsChanged;
 
@@ -33,16 +34,23 @@ namespace Gameplay.Weapons.Magazines
             return Bullets;
         }
 
-        public bool TryFire()
-        {
-            if (Bullets >= 1)
-            {
-                Bullets--;
-                BulletsChanged?.Invoke(Bullets);
-                return true;
-            }
 
-            return false;
+        public void LoseBullet()
+        {
+            Bullets--;
+
+            if (Bullets < 0)
+            {
+                Bullets = 0;
+            }
+            
+            BulletsChanged?.Invoke(Bullets);
+        }
+
+        public void Clear()
+        {
+            Bullets = 0;
+            BulletsChanged?.Invoke(Bullets);
         }
     }
 }

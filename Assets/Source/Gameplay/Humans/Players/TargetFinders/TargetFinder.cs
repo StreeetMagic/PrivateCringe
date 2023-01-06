@@ -7,13 +7,12 @@ namespace Gameplay.Humans.Players.TargetFinders
 {
     public class TargetFinder : MonoBehaviour
     {
+        private const float FindRadius = 20f;
+        private const float LoseRadius = 20.5f;
+        private const float Cooldown = .1f;
+
         private ITargetable _target;
-
-        [SerializeField] private float FindRadius = 10f;
-        [SerializeField] private float LoseRadius = 10.1f;
-
         private Coroutine _searchingTargets;
-        private readonly float _cooldown = .1f;
 
         public event Action<ITargetable> TargetSet;
         public event Action TargetLost;
@@ -24,11 +23,13 @@ namespace Gameplay.Humans.Players.TargetFinders
             {
                 _searchingTargets = StartCoroutine(SearchingForTargets());
             }
+            
+            
         }
 
         private IEnumerator SearchingForTargets()
         {
-            var pause = new WaitForSeconds(_cooldown);
+            var pause = new WaitForSeconds(Cooldown);
 
             while (true)
             {

@@ -9,71 +9,45 @@ namespace Gameplay.Weapons.Famas
         [SerializeField] private int _fireCount = 3;
         [SerializeField] private float _tripleShotCooldown = 0.06f;
 
-        public override bool TryFire()
-        {
-            if (_firingCoroutine != null)
-            {
-                Shooter.Stop();
-
-                return false;
-            }
-
-            if (_reloadingCoroutine != null)
-            {
-                Shooter.Stop();
-
-                return false;
-            }
-
-            if (Magazine.Bullets < _fireCount)
-            {
-                TryReload();
-                Shooter.Stop();
-
-                return false;
-            }
-
-            _firingCoroutine = StartCoroutine(Firing());
-
-            return true;
-        }
+       
 
         protected override IEnumerator Firing()
         {
-            var singlePause = new WaitForSeconds(_tripleShotCooldown);
-            var queuePause = new WaitForSeconds(MainFireCooldown);
+            IsFiring = true;
 
-            while (Magazine.Bullets >= 1)
+            while (CanFire)
             {
                 for (int i = 0; i < _fireCount; i++)
                 {
-                    if (Magazine.TryFire())
+                    if (Magazine.Bullets == 1)
                     {
-                        FireSingleBullet();
+                        Magazine.Clear();
 
-                        yield return singlePause;
+                        if (Bullets > 0)
+                        {
+                            Reload();
+                        }
+                        else
+                        {
+                            Stop();
+                        }
+                    }
+                    else
+                    {
+                        Magazine.LoseBullet();
+                        FireSingleBullet();
+                        yield return new WaitForSeconds(_tripleShotCooldown);
                     }
                 }
-
-                yield return queuePause;
+                yield return new WaitForSeconds(MainFireCooldown);
             }
-            Stop();
-            TryReload();
         }
 
-        protected override bool TryReload()
-        {
-            if (_reloadingCoroutine != null)
-                return false;
 
-            _reloadingCoroutine = StartCoroutine(Reloading());
-
-            return true;
-        }
 
         protected override IEnumerator Reloading()
         {
-            Shooter.Stop();
+            IsReloading = true;
 
             yield return new WaitForSeconds(ReloadTime);
 
@@ -83,18 +57,15 @@ namespace Gameplay.Weapons.Famas
                 Bullets -= Magazine.MaxCapacity;
                 BulletsChanged?.Invoke(Bullets);
             }
-            else if (Bullets < Magazine.MaxCapacity && Bullets > 0)
+            else
             {
                 Magazine.Fill(Bullets);
                 Bullets = 0;
                 BulletsChanged?.Invoke(Bullets);
             }
-            else
-            {
-                print("Нет патронов");
-            }
 
-            Stop();
+            IsReloading = false;
+            StopCoroutine(_reloadingCoroutine);
         }
     }
 }
