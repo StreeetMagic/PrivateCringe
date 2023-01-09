@@ -1,7 +1,7 @@
 using Gameplay.Interfaces;
 using UnityEngine;
 
-namespace Gameplay.Humans.Enemies.Scripts
+namespace Gameplay.Enemies.Scripts
 {
     public class Mover : MonoBehaviour, IChangePosition
     {

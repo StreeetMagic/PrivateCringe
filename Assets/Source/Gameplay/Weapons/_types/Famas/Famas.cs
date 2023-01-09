@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Gameplay.Interfaces;
+using UI.HUD;
 using UnityEngine;
 
 namespace Gameplay.Weapons.Famas
@@ -8,8 +9,6 @@ namespace Gameplay.Weapons.Famas
     {
         [SerializeField] private int _fireCount = 3;
         [SerializeField] private float _tripleShotCooldown = 0.06f;
-
-       
 
         protected override IEnumerator Firing()
         {
@@ -36,14 +35,14 @@ namespace Gameplay.Weapons.Famas
                     {
                         Magazine.LoseBullet();
                         FireSingleBullet();
+
                         yield return new WaitForSeconds(_tripleShotCooldown);
                     }
                 }
+
                 yield return new WaitForSeconds(MainFireCooldown);
             }
         }
-
-
 
         protected override IEnumerator Reloading()
         {

@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public interface IWeapon
+namespace Gameplay.Interfaces
 {
-    public void Stop();
+    public interface IWeapon
+    {
+        public void Stop();
+    }
 }

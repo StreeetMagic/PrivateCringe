@@ -1,5 +1,4 @@
 ﻿using System;
-using Gameplay.Humans.Players.TargetFinders;
 using UnityEngine;
 
 namespace Gameplay.Interfaces

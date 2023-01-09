@@ -3,7 +3,7 @@ using System.Collections;
 using Gameplay.Interfaces;
 using UnityEngine;
 
-namespace Gameplay.Humans.Players.TargetFinders
+namespace Gameplay.Players.TargetFinders
 {
     public class TargetFinder : MonoBehaviour
     {
@@ -23,8 +23,6 @@ namespace Gameplay.Humans.Players.TargetFinders
             {
                 _searchingTargets = StartCoroutine(SearchingForTargets());
             }
-            
-            
         }
 
         private IEnumerator SearchingForTargets()

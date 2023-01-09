@@ -2,7 +2,7 @@ using Gameplay.Interfaces;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Gameplay.Humans.Players
+namespace Gameplay.Players.Scripts
 {
     public class Mover : MonoBehaviour, IChangePosition
     {

@@ -1,9 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
 using Gameplay.Weapons;
 using UnityEngine;
 
-namespace Gameplay.Humans.Players
+namespace Gameplay.Players.Scripts
 {
     public class WeaponSwitcher : MonoBehaviour
     {

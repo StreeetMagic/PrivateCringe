@@ -13,15 +13,17 @@ namespace Gameplay.Weapons.Magazines
 
         public event Action <int> BulletsChanged;
 
+        private void Start()
+        {
+            BulletsChanged?.Invoke(Bullets);
+        }
+
         private void OnEnable()
         {
             BulletsChanged?.Invoke(Bullets);
         }
 
-        private void Start()
-        {
-            BulletsChanged?.Invoke(Bullets);
-        }
+
 
         public int Fill(int count)
         {

@@ -1,12 +1,9 @@
-using System;
 using System.Collections;
-using AYellowpaper;
-using Gameplay.Humans.Players.TargetFinders;
 using Gameplay.Interfaces;
-using Unity.VisualScripting;
+using Gameplay.Players.TargetFinders;
 using UnityEngine;
 
-namespace Gameplay.Humans.Players
+namespace Gameplay.Players.Scripts
 {
     public class TargetFollower : MonoBehaviour
     {

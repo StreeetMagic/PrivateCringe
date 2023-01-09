@@ -1,7 +1,7 @@
 using Gameplay.Weapons;
 using UnityEngine;
 
-namespace Gameplay.Humans.Players
+namespace Gameplay.Players.Scripts
 {
     public class Reloader : MonoBehaviour
     {
@@ -20,11 +20,6 @@ namespace Gameplay.Humans.Players
             }
 
             return false;
-        }
-
-        public void OnReloaded()
-        {
-            Shooter.TryFire();
         }
     }
 }

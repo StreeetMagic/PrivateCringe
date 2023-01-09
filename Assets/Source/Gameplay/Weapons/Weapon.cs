@@ -1,10 +1,11 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using Gameplay.Humans.Players;
 using Gameplay.Interfaces;
+using Gameplay.Players.Scripts;
 using Gameplay.Weapons.Bullets;
 using Gameplay.Weapons.Magazines;
+using UI.HUD;
+using UI.HUD.ReloaderBars;
 using UnityEngine;
 using Random = System.Random;
 
@@ -15,6 +16,7 @@ namespace Gameplay.Weapons
     {
         [SerializeField] protected float ReloadTime = 1;
         [SerializeField] protected float MainFireCooldown = .4f;
+        
         [SerializeField] protected Bullet BulletPrefab;
         [SerializeField] protected Shooter Shooter;
         [SerializeField] protected Reloader Reloader;
@@ -29,14 +31,18 @@ namespace Gameplay.Weapons
         public bool IsFiring { get; protected set; }
 
         public Action<int> BulletsChanged;
-        public Action Reloaded;
+        public event Action <float> ReloadStarted;
 
         [field: SerializeField] public int Bullets { get; protected set; }
         [field: SerializeField] public Magazine Magazine { get; protected set; }
         [field: SerializeField] public Transform ShootingPoint { get; protected set; }
 
         public bool CanFire => Magazine.Bullets > 0;
-        public bool CanReload => (Bullets > 0 && Magazine.IsEmpty && _reloadingCoroutine == null);
+        
+        public bool CanReload =>
+            Bullets > 0 && 
+            Magazine.IsEmpty && 
+            IsReloading == false;
 
         private void Update()
         {
@@ -54,11 +60,12 @@ namespace Gameplay.Weapons
             BulletsChanged?.Invoke(Bullets);
         }
 
-        protected void GainBullets(int count)
+        public void GainBullets(int count)
         {
             if (count > 0)
             {
                 Bullets += count;
+                BulletsChanged?.Invoke(Bullets);
             }
         }
 
@@ -89,24 +96,17 @@ namespace Gameplay.Weapons
         public bool TryFire()
         {
             if (IsFiring)
-            {
                 return false;
-            }
 
             if (IsReloading)
-            {
                 return false;
-            }
 
             if (Magazine.Bullets < 1)
-            {
                 return false;
-            }
 
             if (IsFiring == false)
             {
                 _firingCoroutine = StartCoroutine(Firing());
-
                 return true;
             }
 
@@ -116,6 +116,7 @@ namespace Gameplay.Weapons
         public void Reload()
         {
             Stop();
+            ReloadStarted?.Invoke(ReloadTime);
             _reloadingCoroutine = StartCoroutine(Reloading());
         }
 

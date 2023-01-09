@@ -1,6 +1,5 @@
 using System;
 using AYellowpaper;
-using Gameplay.Humans.Players;
 using Gameplay.Interfaces;
 using UnityEngine;
 

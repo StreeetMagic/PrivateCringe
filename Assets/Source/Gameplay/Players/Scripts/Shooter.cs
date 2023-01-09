@@ -1,10 +1,10 @@
 using System.Collections;
-using Gameplay.Humans.Players.TargetFinders;
 using Gameplay.Interfaces;
+using Gameplay.Players.TargetFinders;
 using Gameplay.Weapons;
 using UnityEngine;
 
-namespace Gameplay.Humans.Players
+namespace Gameplay.Players.Scripts
 {
     public class Shooter : MonoBehaviour
     {
@@ -17,7 +17,6 @@ namespace Gameplay.Humans.Players
         private Coroutine _waitAndFire;
 
         private Weapon CurrentWeapon => WeaponSwitcher.CurrentWeapon;
-
         private Weapon Pistol => WeaponSwitcher.Pistol;
         private Weapon Famas => WeaponSwitcher.Famas;
         private Weapon Shotgun => WeaponSwitcher.Shotgun;
@@ -68,24 +67,16 @@ namespace Gameplay.Humans.Players
                 else if (CurrentWeapon == Shotgun && CurrentWeapon.CanFire)
                     TryFire();
 
-                else if (CurrentWeapon == Pistol && CurrentWeapon.CanFire == false)
+                else if (CurrentWeapon != Pistol && CurrentWeapon.CanFire == false)
                     WeaponSwitcher.SwitchTo(Pistol);
 
-                else if (CurrentWeapon == Shotgun && CurrentWeapon.CanFire)
+                else if (CurrentWeapon == Pistol && CurrentWeapon.CanFire)
                     TryFire();
             }
         }
 
         public void TryFire()
         {
-            if (CurrentWeapon.CanFire == false)
-            {
-                print("просим перезярдится");
-                Reloader.TryReload(CurrentWeapon);
-
-                return;
-            }
-
             if (CurrentWeapon.IsFiring == false)
             {
                 _waitAndFire = StartCoroutine(WaitAndFire());

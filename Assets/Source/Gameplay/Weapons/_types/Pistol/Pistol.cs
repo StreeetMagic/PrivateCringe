@@ -9,6 +9,8 @@ namespace Gameplay.Weapons.Pistol
        
         protected override IEnumerator Firing()
         {
+            IsFiring = true;
+            
             var pause = new WaitForSeconds(MainFireCooldown);
 
             while (CanFire)
@@ -34,6 +36,7 @@ namespace Gameplay.Weapons.Pistol
                     yield return pause;
                 }
             }
+            IsFiring = false;
         }
 
         protected override IEnumerator Reloading()
