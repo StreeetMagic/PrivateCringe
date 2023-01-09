@@ -6,7 +6,7 @@ namespace Gameplay.Loots.Ammos
 {
     public class Ammo : Loot
     {
-        [field:SerializeReference] public Weapon Weapon { get; private set; }
+        [field:SerializeField] public Weapon Weapon { get; private set; }
 
         public int Bullets { get; private set; }
 
@@ -17,7 +17,7 @@ namespace Gameplay.Loots.Ammos
 
         public void PickUp()
         {
-            Weapon.GainBullets(Bullets);
+            Weapon.WeaponBandolier.GainBullets(Bullets);
         }
     }
 }

@@ -3,8 +3,10 @@ using UnityEngine;
 
 namespace Gameplay.Weapons.Magazines
 {
-    public class Magazine : MonoBehaviour
+    public class WeaponMagazine : MonoBehaviour
     {
+        
+        
         [field: SerializeField] public int MaxCapacity { get; private set; }
         [field: SerializeField] public int Bullets { get; private set; }
 

@@ -14,14 +14,14 @@ namespace UI.HUD
 
         private void OnEnable()
         {
-            _weapon.BulletsChanged += SetBullets;
-            _weapon.Magazine.BulletsChanged += SetMagazineBullets;
+            _weapon.WeaponBandolier.BulletsChanged += SetBullets;
+            _weapon.WeaponMagazine.BulletsChanged += SetMagazineBullets;
         }
 
         private void OnDisable()
         {
-            _weapon.BulletsChanged -= SetBullets;
-            _weapon.Magazine.BulletsChanged -= SetMagazineBullets;
+            _weapon.WeaponBandolier.BulletsChanged -= SetBullets;
+            _weapon.WeaponMagazine.BulletsChanged -= SetMagazineBullets;
         }
 
         private void SetBullets(int count)
@@ -43,7 +43,4 @@ namespace UI.HUD
         }
     }
 
-    class BulletDisplayerImpl : BulletDisplayer
-    {
-    }
 }

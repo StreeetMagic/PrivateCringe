@@ -10,11 +10,10 @@ namespace Gameplay.Players.Scripts
 
         public bool TryReload(Weapon weapon)
         {
-            if (weapon.CanReload)
+            if (weapon.WeaponReloader.CanReload)
             {
-                print("Перезарядка началась");
                 Shooter.Stop();
-                weapon.Reload();
+                weapon.WeaponReloader.Reload();
 
                 return true;
             }

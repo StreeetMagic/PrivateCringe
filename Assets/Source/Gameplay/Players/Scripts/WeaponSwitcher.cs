@@ -48,9 +48,6 @@ namespace Gameplay.Players.Scripts
             Pistol.gameObject.SetActive(false);
             Shotgun.gameObject.SetActive(false);
 
-            Famas.Stop();
-            Pistol.Stop();
-            Shotgun.Stop();
 
             yield return new WaitForSeconds(SwitchCooldown);
 

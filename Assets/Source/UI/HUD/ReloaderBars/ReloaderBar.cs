@@ -12,12 +12,12 @@ namespace UI.HUD.ReloaderBars
 
         private void OnEnable()
         {
-            _weapon.ReloadStarted += Draw;
+            _weapon.WeaponReloader.ReloadStarted += Draw;
         }
 
         private void OnDisable()
         {
-            _weapon.ReloadStarted -= Draw;
+            _weapon.WeaponReloader.ReloadStarted -= Draw;
         }
 
         private void Start()
