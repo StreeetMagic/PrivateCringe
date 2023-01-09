@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Gameplay.Weapons.Magazines
 {
-    public class WeaponMagazine : MonoBehaviour
+    public class Magazine : MonoBehaviour
     {
         
         
@@ -39,9 +39,9 @@ namespace Gameplay.Weapons.Magazines
         }
 
 
-        public void LoseBullet()
+        public void LoseBullets(int count)
         {
-            Bullets--;
+            Bullets -= count;
 
             if (Bullets < 0)
             {

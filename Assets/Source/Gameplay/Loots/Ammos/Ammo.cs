@@ -17,7 +17,7 @@ namespace Gameplay.Loots.Ammos
 
         public void PickUp()
         {
-            Weapon.WeaponBandolier.GainBullets(Bullets);
+            Weapon.Bandolier.AddBullets(Bullets);
         }
     }
 }

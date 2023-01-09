@@ -3,44 +3,52 @@ using UnityEngine;
 
 namespace Gameplay.Weapons.Famas
 {
-    public class FamasShooter : WeaponShooter
+    public class FamasShooter : Shooter
     {
         [SerializeField] private int _fireCount = 3;
-        [SerializeField] private float _tripleShotCooldown = 0.06f;
-        
+        [SerializeField] private float _tripleShotCooldown = 1.06f;
+
         protected override IEnumerator Shooting()
         {
+            var pause = new WaitForSeconds(MainFireCooldown);
+            var smallPause = new WaitForSeconds(_tripleShotCooldown);
+
             IsShooting = true;
 
-            while (CanShoot)
+            print("Начали корутину стрельбы");
+
+            var remainder = Magazine.Bullets % _fireCount;
+            print("Остаток от деления" + remainder);
+
+            if (remainder > 0)
             {
-                for (int i = 0; i < _fireCount; i++)
+                Magazine.LoseBullets(remainder);
+                Bandolier.AddBullets(remainder);
+            }
+
+            var shoots = Magazine.Bullets / _fireCount;
+
+            print("на начало стрельбы в магазине " + Magazine.Bullets);
+            
+            for (int i = 0; i < shoots; i++)
+            {
+                for (int j = 0; j < _fireCount; j++)
                 {
-                    if (WeaponMagazine.Bullets == 1)
-                    {
-                        WeaponMagazine.Clear();
+                    Magazine.LoseBullets(1);
+                    ShootSingleBullet();
 
-                        if (WeaponBandolier.Bullets > 0)
-                        {
-                            WeaponReloader.Reload();
-                        }
-                        else
-                        {
-                            Stop();
-                        }
-                    }
-                    else
-                    {
-                        WeaponMagazine.LoseBullet();
-                        ShootSingleBullet();
-
-                        yield return new WaitForSeconds(_tripleShotCooldown);
-                    }
+                    yield return smallPause;
                 }
 
-                yield return new WaitForSeconds(MainFireCooldown);
+                yield return pause;
+            }
+
+            IsShooting = false;
+
+            if (Reloader.CanReload)
+            {
+                Reloader.Reload();
             }
         }
-
     }
 }

@@ -13,7 +13,6 @@ namespace Gameplay.Weapons.Bullets
         [SerializeField] private Rigidbody _rigidbody;
         [SerializeField] private float _power = 1000f;
         [SerializeField] private int _damage = 1;
-        [SerializeField] private int _maxOffset = 20;
 
         private  Random _random;
 

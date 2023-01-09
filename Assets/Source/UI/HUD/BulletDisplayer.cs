@@ -14,14 +14,14 @@ namespace UI.HUD
 
         private void OnEnable()
         {
-            _weapon.WeaponBandolier.BulletsChanged += SetBullets;
-            _weapon.WeaponMagazine.BulletsChanged += SetMagazineBullets;
+            _weapon.Bandolier.BulletsChanged += SetBullets;
+            _weapon.Magazine.BulletsChanged += SetMagazineBullets;
         }
 
         private void OnDisable()
         {
-            _weapon.WeaponBandolier.BulletsChanged -= SetBullets;
-            _weapon.WeaponMagazine.BulletsChanged -= SetMagazineBullets;
+            _weapon.Bandolier.BulletsChanged -= SetBullets;
+            _weapon.Magazine.BulletsChanged -= SetMagazineBullets;
         }
 
         private void SetBullets(int count)

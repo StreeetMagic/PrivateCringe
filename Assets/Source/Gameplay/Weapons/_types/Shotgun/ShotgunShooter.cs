@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Gameplay.Weapons.Shotgun
 {
-    public class ShotgunShooter : WeaponShooter
+    public class ShotgunShooter : Shooter
     {
         protected override IEnumerator Shooting()
         {
@@ -12,23 +12,23 @@ namespace Gameplay.Weapons.Shotgun
 
             while (CanShoot)
             {
-                if (WeaponMagazine.Bullets == 1)
+                if (Magazine.Bullets == 1)
                 {
-                    WeaponMagazine.Clear();
+                    Magazine.Clear();
 
-                    if (WeaponBandolier.Bullets > 0)
+                    if (Bandolier.Bullets > 0)
                     {
                         
-                        WeaponReloader.Reload();
+                        Reloader.Reload();
                     }
                     else
                     {
-                        Stop();
+                        StopShooting();
                     }
                 }
                 else
                 {
-                    WeaponMagazine.LoseBullet();
+                    Magazine.LoseBullets(1);
 
                     for (int i = 0; i < 8; i++)
                     {

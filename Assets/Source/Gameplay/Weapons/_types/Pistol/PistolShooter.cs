@@ -3,39 +3,30 @@ using UnityEngine;
 
 namespace Gameplay.Weapons.Pistol
 {
-    public class PistolShooter : WeaponShooter
-    {       
+    public class PistolShooter : Shooter
+    {
         protected override IEnumerator Shooting()
         {
             IsShooting = true;
             
-            var pause = new WaitForSeconds(MainFireCooldown);
+            print("Начали корутину стрельбы");
 
-            while (CanShoot)
+            for (int i = 0; i < Magazine.Bullets; i++)
             {
-                if (WeaponMagazine.Bullets == 1)
-                {
-                    WeaponMagazine.Clear();
+                var pause = new WaitForSeconds(MainFireCooldown);
 
-                    if (WeaponBandolier.Bullets > 0)
-                    {
-                        WeaponReloader.Reload();
-                    }
-                    else
-                    {
-                        Stop();
-                    }
-                }
-                else
-                {
-                    WeaponMagazine.LoseBullet();
-                    ShootSingleBullet();
+                Magazine.LoseBullets(1);
+                ShootSingleBullet();
 
-                    yield return pause;
-                }
+                yield return pause;
             }
+            
             IsShooting = false;
+            
+            if (Reloader.CanReload)
+            {
+                Reloader.Reload();
+            }
         }
-
     }
 }

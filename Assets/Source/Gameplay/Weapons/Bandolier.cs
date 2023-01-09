@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Gameplay.Weapons
 {
-    public class WeaponBandolier : MonoBehaviour
+    public class Bandolier : MonoBehaviour
     {
         [field: SerializeField] public int Bullets { get; protected set; }
 
@@ -14,7 +14,7 @@ namespace Gameplay.Weapons
             BulletsChanged?.Invoke(Bullets);
         }
 
-        public void GainBullets(int count)
+        public void AddBullets(int count)
         {
             if (count > 0)
             {

@@ -8,23 +8,23 @@ using Random = System.Random;
 namespace Gameplay.Weapons
 {
     [ExecuteAlways]
-    public abstract class WeaponShooter : MonoBehaviour
+    public abstract class Shooter : MonoBehaviour
     {
-        protected const float MainFireCooldown = .4f;
+        protected const float MainFireCooldown = 1f;
 
         [field: SerializeField] public Weapon Weapon { get; private set; }
 
         [SerializeField] protected Bullet BulletPrefab;
 
-        protected WeaponBandolier WeaponBandolier => Weapon.WeaponBandolier;
-        protected WeaponMagazine WeaponMagazine => Weapon.WeaponMagazine;
-        protected WeaponReloader WeaponReloader => Weapon.WeaponReloader;
+        protected Bandolier Bandolier => Weapon.Bandolier;
+        protected Magazine Magazine => Weapon.Magazine;
+        protected Reloader Reloader => Weapon.Reloader;
 
         [SerializeField] private Transform[] _aimPoints;
 
         protected Coroutine _shootingCoroutine;
 
-        public bool CanShoot => WeaponMagazine.Bullets > 0;
+        public bool CanShoot => Magazine.Bullets > 0;
         public bool IsShooting { get; protected set; }
 
         protected abstract IEnumerator Shooting();
@@ -46,10 +46,10 @@ namespace Gameplay.Weapons
 
         private void OnEnable()
         {
-            Stop();
+            StopShooting();
         }
 
-        public void Stop()
+        public void StopShooting()
         {
             if (IsShooting && _shootingCoroutine != null)
             {
@@ -78,11 +78,9 @@ namespace Gameplay.Weapons
             if (IsShooting)
                 return false;
 
-            if (WeaponReloader.IsReloading)
+            if (Reloader.IsReloading)
                 return false;
 
-            if (WeaponMagazine.Bullets < 1)
-                return false;
 
             if (IsShooting == false)
             {
