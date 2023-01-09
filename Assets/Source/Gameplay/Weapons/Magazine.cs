@@ -10,8 +10,7 @@ namespace Gameplay.Weapons.Magazines
         [field: SerializeField] public int MaxCapacity { get; private set; }
         [field: SerializeField] public int Bullets { get; private set; }
 
-        public bool IsEmpty => Bullets == 0;
-        public bool IsFull => Bullets == MaxCapacity;
+        public bool IsFull => Bullets >= MaxCapacity;
 
         public event Action <int> BulletsChanged;
 

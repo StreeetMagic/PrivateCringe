@@ -10,26 +10,20 @@ namespace Gameplay.Weapons
     [ExecuteAlways]
     public abstract class Shooter : MonoBehaviour
     {
-        protected const float MainFireCooldown = 1f;
+        protected const float MainFireCooldown = .4f;
 
-        [field: SerializeField] public Weapon Weapon { get; private set; }
-
+        [SerializeField] protected int _shootQueue = 1;
         [SerializeField] protected Bullet BulletPrefab;
-
-        protected Bandolier Bandolier => Weapon.Bandolier;
-        protected Magazine Magazine => Weapon.Magazine;
-        protected Reloader Reloader => Weapon.Reloader;
-
         [SerializeField] private Transform[] _aimPoints;
-
         protected Coroutine _shootingCoroutine;
 
-        public bool CanShoot => Magazine.Bullets > 0;
+        [field: SerializeField] public Weapon Weapon { get; private set; }
+        public bool CanShoot => Weapon.Magazine.Bullets > _shootQueue;
         public bool IsShooting { get; protected set; }
+        private readonly Random _random = new Random();
 
         protected abstract IEnumerator Shooting();
 
-        private readonly Random _random = new Random();
 
         [field: SerializeField] public Transform ShootingPoint { get; protected set; }
 
@@ -37,9 +31,11 @@ namespace Gameplay.Weapons
         {
             foreach (var aimPoint in _aimPoints)
             {
+                var position = ShootingPoint.position;
+                
                 Debug.DrawRay(
-                    ShootingPoint.position,
-                    (aimPoint.position - ShootingPoint.position) * 100,
+                    position,
+                    (aimPoint.position - position) * 100,
                     Color.cyan);
             }
         }
@@ -68,7 +64,7 @@ namespace Gameplay.Weapons
 
             var randomNumber = _random.Next(_aimPoints.Length);
             var randomAimPoint = _aimPoints[randomNumber];
-            var direction = (randomAimPoint.position - ShootingPoint.position);
+            var direction = randomAimPoint.position - ShootingPoint.position;
 
             bullet.Push(direction);
         }
@@ -78,7 +74,7 @@ namespace Gameplay.Weapons
             if (IsShooting)
                 return false;
 
-            if (Reloader.IsReloading)
+            if (Weapon.Reloader.IsReloading)
                 return false;
 
 

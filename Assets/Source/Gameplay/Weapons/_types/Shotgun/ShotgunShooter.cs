@@ -12,14 +12,14 @@ namespace Gameplay.Weapons.Shotgun
 
             while (CanShoot)
             {
-                if (Magazine.Bullets == 1)
+                if (Weapon.Magazine.Bullets == 1)
                 {
-                    Magazine.Clear();
+                    Weapon.Magazine.Clear();
 
-                    if (Bandolier.Bullets > 0)
+                    if (Weapon.Bandolier.Bullets > 0)
                     {
                         
-                        Reloader.Reload();
+                        Weapon.Reloader.Reload();
                     }
                     else
                     {
@@ -28,7 +28,7 @@ namespace Gameplay.Weapons.Shotgun
                 }
                 else
                 {
-                    Magazine.LoseBullets(1);
+                    Weapon.Magazine.LoseBullets(1);
 
                     for (int i = 0; i < 8; i++)
                     {

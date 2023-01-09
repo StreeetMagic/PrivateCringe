@@ -23,7 +23,7 @@ namespace Gameplay.Weapons
 
         public bool CanReload =>
             Bandolier.Bullets > 0 &&
-            Magazine.IsEmpty &&
+            Magazine.IsFull == false &&
             IsReloading == false;
 
         public void Reload()
@@ -39,10 +39,13 @@ namespace Gameplay.Weapons
 
             yield return new WaitForSeconds(ReloadTime);
 
-            if (Bandolier.Bullets >= Magazine.MaxCapacity)
+            var remainingBullets = Magazine.MaxCapacity - Magazine.Bullets;
+            
+            
+            if (Bandolier.Bullets >= remainingBullets)
             {
-                Magazine.Fill(Magazine.MaxCapacity);
-                Bandolier.LoseBullets(Magazine.MaxCapacity);
+                Magazine.Fill(remainingBullets);
+                Bandolier.LoseBullets(remainingBullets);
             }
             else
             {

@@ -118,8 +118,12 @@ namespace Gameplay.Players.TargetFinders
 
         private void OnLost()
         {
-            _target.SetTargetedOff();
-            _target = null;
+            if (_target != null)
+            {
+                _target.SetTargetedOff();
+                _target = null;
+            }
+
             TargetLost?.Invoke();
         }
     }

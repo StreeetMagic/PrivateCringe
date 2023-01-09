@@ -7,15 +7,15 @@ namespace Gameplay.Weapons.Pistol
     {
         protected override IEnumerator Shooting()
         {
+            var pause = new WaitForSeconds(MainFireCooldown);
+           
             IsShooting = true;
             
-            print("Начали корутину стрельбы");
+            var currentBullets = Weapon.Magazine.Bullets;
 
-            for (int i = 0; i < Magazine.Bullets; i++)
+            for (int i = 0; i < currentBullets; i++)
             {
-                var pause = new WaitForSeconds(MainFireCooldown);
-
-                Magazine.LoseBullets(1);
+                Weapon.Magazine.LoseBullets(1);
                 ShootSingleBullet();
 
                 yield return pause;
@@ -23,9 +23,10 @@ namespace Gameplay.Weapons.Pistol
             
             IsShooting = false;
             
-            if (Reloader.CanReload)
+            if (Weapon.Reloader.CanReload)
             {
-                Reloader.Reload();
+                
+                Weapon.Reloader.Reload();
             }
         }
     }

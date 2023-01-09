@@ -29,8 +29,9 @@ namespace Gameplay.Players.Scripts
         {
             bool isReloading = _weaponSwitcher.CurrentWeapon.Reloader.IsReloading;
             bool isSwitching = _weaponSwitcher.IsSwitching;
+            bool isShooting = _weaponSwitcher.CurrentWeapon.Shooter.IsShooting;
 
-            if (isReloading || isSwitching)
+            if (isReloading | isSwitching | isShooting)
             {
                 return;
             }
@@ -99,7 +100,7 @@ namespace Gameplay.Players.Scripts
             weapons[0] = _weaponSwitcher.Pistol;
             weapons[1] = _weaponSwitcher.Famas;
             weapons[2] = _weaponSwitcher.Shotgun;
-
+            
             foreach (var weapon in weapons)
             {
                 if (weapon.Reloader.CanReload)

@@ -5,8 +5,10 @@ namespace Gameplay.Weapons.Famas
 {
     public class FamasShooter : Shooter
     {
-        [SerializeField] private int _fireCount = 3;
-        [SerializeField] private float _tripleShotCooldown = 1.06f;
+
+        [SerializeField] private float _tripleShotCooldown = 0.06f;
+
+        public new bool CanShoot => Weapon.Magazine.Bullets >= 3;
 
         protected override IEnumerator Shooting()
         {
@@ -15,26 +17,23 @@ namespace Gameplay.Weapons.Famas
 
             IsShooting = true;
 
-            print("Начали корутину стрельбы");
 
-            var remainder = Magazine.Bullets % _fireCount;
-            print("Остаток от деления" + remainder);
+            int remainder = Weapon.Magazine.Bullets % _shootQueue;
 
             if (remainder > 0)
             {
-                Magazine.LoseBullets(remainder);
-                Bandolier.AddBullets(remainder);
+                Weapon.Magazine.LoseBullets(remainder);
+                Weapon.Bandolier.AddBullets(remainder);
             }
 
-            var shoots = Magazine.Bullets / _fireCount;
+            var shoots = Weapon.Magazine.Bullets / _shootQueue;
 
-            print("на начало стрельбы в магазине " + Magazine.Bullets);
             
             for (int i = 0; i < shoots; i++)
             {
-                for (int j = 0; j < _fireCount; j++)
+                for (int j = 0; j < _shootQueue; j++)
                 {
-                    Magazine.LoseBullets(1);
+                    Weapon.Magazine.LoseBullets(1);
                     ShootSingleBullet();
 
                     yield return smallPause;
@@ -45,9 +44,9 @@ namespace Gameplay.Weapons.Famas
 
             IsShooting = false;
 
-            if (Reloader.CanReload)
+            if (Weapon.Reloader.CanReload)
             {
-                Reloader.Reload();
+                Weapon.Reloader.Reload();
             }
         }
     }
