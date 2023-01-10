@@ -61,6 +61,7 @@ namespace Gameplay.Crates
         {
             Missed?.Invoke();
             gameObject.SetActive(false);
-        }
+            
+       }
     }
 }
